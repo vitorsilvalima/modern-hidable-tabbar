@@ -2,11 +2,19 @@ import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
 import AppNavigator from './exampleApp/navigation/AppNavigator';
+import { TabBarProvider } from './exampleApp/state/tabBar'
 
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    isTabBarVisible: true,
   };
+
+  setVisibility = (visible) => this.setState({
+    isTabBarVisible: visible,
+  })
+
+  handleOnMiddleButtonPress = () => console.log("Button Pressed")
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -19,10 +27,16 @@ export default class App extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
+        <TabBarProvider value={{
+          setVisibility: this.setVisibility,
+          visible: this.state.isTabBarVisible,
+          onMiddleButtonPress: this.handleOnMiddleButtonPress,
+        }}>
+          <View style={styles.container}>
+            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            <AppNavigator />
+          </View>
+        </TabBarProvider>
       );
     }
   }
