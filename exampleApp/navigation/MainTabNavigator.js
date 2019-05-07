@@ -61,5 +61,6 @@ export default createBottomTabNavigator({
   LinksStack,
   SettingsStack,
 }, {
+  initialRouteName: 'SettingsStack',
   tabBarComponent: withTabBarState(TabBar),
 })
